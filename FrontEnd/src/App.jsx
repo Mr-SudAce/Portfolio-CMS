@@ -1,10 +1,16 @@
 import './App.css'
+import './index.css'
+// eslint-disable-next-line no-unused-vars
+import * as index from './index.jsx'
+
 
 function App() {
 
   return (
     <>
-      <h1>Hello</h1>
+      <div className="container">
+        <index.Header/>
+      </div>
     </>
   )
 }
