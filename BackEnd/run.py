@@ -1,7 +1,16 @@
-from multiprocessing.util import debug
+from flask_migrate import upgrade
 from app import create_app, db
 
 app = create_app()
 
+def auto_migrate():
+    try:
+        upgrade()
+        print("✅ Database schema is up to date.")
+    except Exception as e:
+        print("❌ Migration failed:", e)
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    with app.app_context():
+        auto_migrate()
+    app.run(debug=True)

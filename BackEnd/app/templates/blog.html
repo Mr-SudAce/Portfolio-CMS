@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+</head>
+<body>
+    <h1>Create a Blog Post</h1>
+    <form action="/api/blog" method="POST" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Blog Title" required><br>
+        <input type="text" name="author" placeholder="Author Name" required><br>
+        <input type="text" name="tags" placeholder="Tags (comma separated)" required><br>
+        <input type="text" name="slug" placeholder="Slug (URL-friendly title)" required><br>
+        <textarea name="content" placeholder="Blog Content" rows="6" required></textarea><br>
+        <input type="file" name="image" accept="image/*"><br><br>
+        <button type="submit">Create Blog</button>
+    </form>
+
+    <footer>
+        <p>&copy; 2025 Your Blog Name</p>
+    </footer>
+</body>
+</html>
