@@ -4,6 +4,8 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from app.models import db
+from app.routes.api_routes import api
+from app.routes.temp_routes import main
 
 migrate = Migrate()
 
@@ -23,7 +25,16 @@ def create_app():
     CORS(app)
     db.init_app(app)
     migrate.init_app(app, db)
-    from app.routes import main
     app.register_blueprint(main)
+    app.register_blueprint(api, url_prefix='/api')
+    
+    
+      # ✅ Add route to serve uploaded files
+    @app.route('/uploads/<path:filename>')
+    def uploaded_file(filename):
+        from flask import send_from_directory
+        uploads_dir = os.path.abspath(os.path.join(basedir, '../uploads'))
+        return send_from_directory(uploads_dir, filename)
+
 
     return app

@@ -35,20 +35,33 @@ def handle_create(model, upload_folder):
         return jsonify({"error": str(e)}), 400
 
 
-def handle_read_all(model):
+def handle_get_all(model):
     items = model.query.all()
     return jsonify({model.__name__: [item.serialize() for item in items]}), 200
 
 
-def handle_read_one(model, id):
+def handle_get_one(model, id):
     item = model.query.get_or_404(id)
     return jsonify({model.__name__: item.serialize()}), 200
 
 
-def handle_update(model, id):
+def handle_update(model, id, upload_folder):
     item = model.query.get_or_404(id)
-    data = request.get_json()
     try:
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
+
+        file = request.files.get("image")
+        if file and upload_folder:
+            os.makedirs(upload_folder, exist_ok=True)
+
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(upload_folder, filename)
+            file.save(filepath)
+            data["image"] = filename  # Save just filename in DB
+
         for key, value in data.items():
             setattr(item, key, value)
         db.session.commit()
